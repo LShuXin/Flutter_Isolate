@@ -187,9 +187,13 @@ class ThreadManagement {
     
     // 调用sendReceive自定义方法
     if (parameter != null) {
+      // await receivePort.first 可以等待获取第一个返回结果
+      // 拿到work isolate 的sendport，用来将参数穿进去
       SendPort sendPort = await response.first;
       ReceivePort receivePort = ReceivePort();
       sendPort.send([parameter, receivePort.sendPort]);
+      
+      // 监听work isolate的完成消息
       receivePort.listen((value)　{
         receivePort.close();
         d.kill();
